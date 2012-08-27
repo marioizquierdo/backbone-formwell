@@ -1,3 +1,8 @@
+###!
+Backbone Formwell 0.0.1
+Write the form validation logic in the model and let formwell show the errors in the view as soon as the user enters something in the input fields.
+https://github.com/marioizquierdo/backbone-formwell
+###
 class Backbone.Formwell
 
   constructor: (options)->
