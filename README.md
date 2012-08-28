@@ -65,7 +65,7 @@ User extends Backbone.Model
 
 Whenever a form input changes, use `formwell.set(attrName, value)` instead of `model.set(attrName, value)`
 
-On form submit, use `formtroll.validate()` before saving the model to ensure there are no errors left in the form.
+On form submit, use `formwell.validate()` before saving the model to ensure there are no errors left in the form.
 
 Example:
 
@@ -78,18 +78,18 @@ class Form extends Backbone.View
     "submit": "validateFormAndSave"
 
   initialize: ->
-    this.formwell = new Backbone.Formwell(model: this.model, view: this)
+    @formwell = new Backbone.Formwell(model: @model, view: @)
 
   validateInput: (event) ->
     $input = $(event.currentTarget)
-    this.formwell.set($input)
+    @formwell.set($input) # use formwell.set instead of model.set
 
   validateFormAndSave: (event)->
     event.preventDefault()
-    if errors = this.formwell.validate()
+    if errors = @formwell.validate() # show errors left
       alert("Can not save because there are errors in the form")
     else
-      this.model.save()
+      @model.save()
 ```
 
 
@@ -175,7 +175,8 @@ For example, if you have a model `User` with a nested `Address` model with sever
 attributes like city, state, etc. You could set the input name to `address[city]`,
 and return something like `{"address[city]": "city does not exist"}` in the validation errors object.
 
-But to actually set the value in the nested address model, you need something like this in the User model:
+But to actually set the value in the nested address model, you need to manually set the nested attribute value,
+or use the `change` event listener to do it automatically, for example:
 
 ```coffeescript
 User extends Backbone.Model
