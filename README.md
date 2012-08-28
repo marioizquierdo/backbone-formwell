@@ -74,13 +74,13 @@ class Form extends Backbone.View
   el: 'form'
 
   events:
-    "change input, textarea, select": "validateInput"
+    "change input, textarea, select": "validateInputAndSet"
     "submit": "validateFormAndSave"
 
   initialize: ->
     @formwell = new Backbone.Formwell(model: @model, view: @)
 
-  validateInput: (event) ->
+  validateInputAndSet: (event) ->
     $input = $(event.currentTarget)
     @formwell.set($input) # use formwell.set instead of model.set
 
@@ -194,13 +194,33 @@ User extends Backbone.Model
 You should use your own library for this, and implement the The `validateModel` method to return the error messages already translated.
 
 
+### Do not validate some fields ###
+
+Backbone View uses jQuery (or Zepto) selectors in the events object, those selectors are pretty powerful. Just filter out the elements that you don't want to validate, for example:
+
+```coffeescript
+MyView extends Backbone.View
+  events:
+    'change input': 'setInputValue'
+
+  setInputValue: (event) ->
+    $input = $(event.currentTarget)
+    attrName = $input.attr('name')
+    value = $input.val()
+    if $input.hasClass 'skip-validation'
+      @model.set(attrName, val)
+    else
+      @formwell.set(attrName, val)
+```
+
 ## Contributions ##
 
 Github makes it easy! open a new issue or branch the project and send a pull request.
 
 ## Changelog ##
 
- * *1.0.0* (Aug 27, 2012): Initial release
+ * *0.0.2* (Aug 28, 2012): Bugfix sometimes show 'error' message when model.validateModel was returning undefined. Review Readme
+ * *0.0.1* (Aug 27, 2012): Initial release
 
 ## Author ##
 
