@@ -1,5 +1,5 @@
 ###!
-Backbone Formwell 0.0.2
+Backbone Formwell 0.0.3
 Write the form validation logic in the model and let formwell show the errors in the view as soon as the user enters something in the input fields.
 https://github.com/marioizquierdo/backbone-formwell
 ###
@@ -35,12 +35,12 @@ class Backbone.Formwell
       attrs = attrName
 
     @model.set(attrs)
-    if errors = @model.validateModel()
-      for attrName, value of attrs
-        if errors and errorMsg = errors[attrName] # show error for this field only
-          @showErrorFor(attrName, errorMsg)
-        else
-          @hideErrorFor(attrName)
+    errors = @model.validateModel()
+    for attrName, value of attrs
+      if errors and errorMsg = errors[attrName] # show error for this field only
+        @showErrorFor(attrName, errorMsg)
+      else
+        @hideErrorFor(attrName)
 
   # Validate model and show all errors in the form
   validate: ->

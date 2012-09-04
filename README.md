@@ -219,6 +219,7 @@ Github makes it easy! open a new issue or branch the project and send a pull req
 
 ## Changelog ##
 
+ * *0.0.3* (Sep 04, 2012): Bugfix hide errors after correcting the form field
  * *0.0.2* (Aug 28, 2012): Bugfix sometimes show 'error' message when model.validateModel was returning undefined. Review Readme
  * *0.0.1* (Aug 27, 2012): Initial release
 
