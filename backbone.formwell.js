@@ -71,7 +71,7 @@ https://github.com/marioizquierdo/backbone-formwell
       $inputEl = this.findInputFor(attrName);
       $errorEl = this.formErrorFindOrCreateErrorEl(attrName, $inputEl);
       $errorEl.text(errorMsg).show();
-      return $inputEl.parents('.form-row').andSelf().addClass('with-error-message');
+      return $inputEl.parents('.form-row').addBack().addClass('with-error-message');
     };
 
     Formwell.prototype.hideErrorFor = function(attrName) {
@@ -79,12 +79,12 @@ https://github.com/marioizquierdo/backbone-formwell
       $inputEl = this.findInputFor(attrName);
       $errorEl = this.formErrorFindOrCreateErrorEl(attrName, $inputEl);
       $errorEl.hide();
-      return $inputEl.parents('.form-row').andSelf().removeClass('with-error-message');
+      return $inputEl.parents('.form-row').addBack().removeClass('with-error-message');
     };
 
     Formwell.prototype.hideAllErrors = function() {
       this.formErrorFindAllErrorsEl().hide();
-      return this.findAllInputs().parents('.form-row').andSelf().removeClass('with-error-message');
+      return this.findAllInputs().parents('.form-row').addBack().removeClass('with-error-message');
     };
 
     Formwell.prototype.findInputFor = function(attrName) {

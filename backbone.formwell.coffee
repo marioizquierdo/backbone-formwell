@@ -66,7 +66,7 @@ class Backbone.Formwell
     $inputEl = @findInputFor(attrName)
     $errorEl = @formErrorFindOrCreateErrorEl(attrName, $inputEl)
     $errorEl.text(errorMsg).show()
-    $inputEl.parents('.form-row').andSelf().addClass('with-error-message')
+    $inputEl.parents('.form-row').addBack().addClass('with-error-message')
 
   # Revert the changes made by showFormError:
   # hide the error message for the attrName input and remove the added .with-error-message css class
@@ -75,12 +75,12 @@ class Backbone.Formwell
     $inputEl = @findInputFor(attrName)
     $errorEl = @formErrorFindOrCreateErrorEl(attrName, $inputEl)
     $errorEl.hide()
-    $inputEl.parents('.form-row').andSelf().removeClass('with-error-message')
+    $inputEl.parents('.form-row').addBack().removeClass('with-error-message')
 
   # Same as hideErrorFor, but for all errors in the form
   hideAllErrors: ->
     @formErrorFindAllErrorsEl().hide()
-    @findAllInputs().parents('.form-row').andSelf().removeClass('with-error-message')
+    @findAllInputs().parents('.form-row').addBack().removeClass('with-error-message')
 
   # Find the form input (or textarea or select) element asociated with the model attribute.
   # The input element should have the same html attribute "name" as the attrName argument.
