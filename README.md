@@ -1,9 +1,9 @@
 Backbone Formwell
 =================
 
-Write the form validation logic in the model
-and let formwell show the errors in the view
-as soon as the user enters something in the input fields.
+Simple Model-View Form Validation
+
+Write validation logic in the Model and let Formwell show the errors in the View as soon as the user types something in the input fields
 
 Scope
 -----
@@ -45,10 +45,10 @@ Link each input, textarea or select tag with the respective model attribute usin
 </form>
 ```
 
-Don't implement Backbone.Model `validate` method, and don't override `isValid`. Those methods need to be left untouched, because we want `set` and `save` to work properly even if the model is invalid, in order to keep the form and the model attributes in sync. (Backbone methods `set` and `save` depend on the `validation` method in a way that is too confusing for a dinamic form, the easiest workaround I could find is to just avoid using `validate`).
+Don't implement Backbone.Model `validate` method, and don't override `isValid`. Those methods need to be left untouched, because we want `set` and `save` to work properly even if the model is invalid, in order to keep the form and the model attributes in sync. (Backbone methods `set` and `save` depend on the `validation` method in a way that is too confusing for a dinamic form, the easiest workaround I could find is to just avoid using `validate`). **Update**: newer versions of Backbone don't block the `set` method with the validation, but I still prefer to have a different method for full compatibility.
 
 Formwell will expect the model to have the method `validateModel` instead.
-Create the method `validateModel` in the model. If model.attributes are valid, don't return anything from validateModel;
+Create the method `validateModel` in the model. If model.attributes are valid, don't return anything from validateModel (undefined, null, false or '');
 if they are invalid, return an errors object, where keys are the invalid attribute names and the values the error messages.
 
 For example:
@@ -219,9 +219,10 @@ Github makes it easy! open a new issue or branch the project and send a pull req
 
 ## Changelog ##
 
- * *0.0.3* (Sep 04, 2012): Bugfix hide errors after correcting the form field
- * *0.0.2* (Aug 28, 2012): Bugfix sometimes show 'error' message when model.validateModel was returning undefined. Review Readme
- * *0.0.1* (Aug 27, 2012): Initial release
+ * **1.0.0** (Oct 11, 2013): Find `.form-field` element from the error element, allowing to style the error without an actual input. Bump to v1.0.0 since this was working on production environments with no problems.
+ * **0.0.3** (Sep 04, 2012): Bugfix hide errors after correcting the form field
+ * **0.0.2** (Aug 28, 2012): Bugfix sometimes show 'error' message when model.validateModel was returning undefined. Review Readme
+ * **0.0.1** (Aug 27, 2012): Initial release
 
 ## Author ##
 

@@ -1,6 +1,7 @@
 ###!
-Backbone Formwell 0.0.3
-Write the form validation logic in the model and let formwell show the errors in the view as soon as the user enters something in the input fields.
+Backbone Formwell 1.0.0
+Simple Model-View Form Validation.
+Write validation logic in the Model and let Formwell show the errors in the View as soon as the user types something in the input fields.
 https://github.com/marioizquierdo/backbone-formwell
 ###
 class Backbone.Formwell
@@ -42,10 +43,11 @@ class Backbone.Formwell
       else
         @hideErrorFor(attrName)
 
-  # Validate model and show all errors in the form
+  # Validate model and show all errors in the form.
+  # Return errors if any, or nil if the model is valid (same return value as expected by @model.validateModel())
   validate: ->
     errors = @model.validateModel()
-    @hideAllErrors() # hide all errors first
+    @hideAllErrors() # cleanup previous errors first
     @showErrorFor(attrName, errorMsg) for attrName, errorMsg of errors if errors # show all validation errors if any
     errors
 
@@ -63,24 +65,31 @@ class Backbone.Formwell
   #  * the error element text will be set to errorMsg,
   #  * the css class .with-error-message will be added to the input element, and any parents with class .form-row (for styling).
   showErrorFor: (attrName, errorMsg) ->
-    $inputEl = @findInputFor(attrName)
-    $errorEl = @formErrorFindOrCreateErrorEl(attrName, $inputEl)
-    $errorEl.text(errorMsg).show()
-    $inputEl.parents('.form-row').addBack().addClass('with-error-message')
+    $input = @findInputFor(attrName)
+    $error = @findOrCreateError(attrName, $input)
+    $error.text(errorMsg).show()
+    $input.addClass('with-error-message') # allow to style the input field on error
+    $error.parents('.form-row').addClass('with-error-message') # and the .form-row wrapper if any
 
   # Revert the changes made by showFormError:
   # hide the error message for the attrName input and remove the added .with-error-message css class
   # if attrName is undefined, hide all errors in the form.
   hideErrorFor: (attrName) ->
-    $inputEl = @findInputFor(attrName)
-    $errorEl = @formErrorFindOrCreateErrorEl(attrName, $inputEl)
-    $errorEl.hide()
-    $inputEl.parents('.form-row').addBack().removeClass('with-error-message')
+    $input = @findInputFor(attrName)
+    $error = @findOrCreateError(attrName, $input)
+
+    $input.removeClass('with-error-message')
+    $error.parents('.form-row').removeClass('with-error-message')
+    $error.hide()
 
   # Same as hideErrorFor, but for all errors in the form
   hideAllErrors: ->
-    @formErrorFindAllErrorsEl().hide()
-    @findAllInputs().parents('.form-row').addBack().removeClass('with-error-message')
+    $input = @findAllInputs()
+    $error = @findAllErrors()
+
+    $input.removeClass('with-error-message')
+    $error.parents('.form-row').removeClass('with-error-message')
+    $error.hide()
 
   # Find the form input (or textarea or select) element asociated with the model attribute.
   # The input element should have the same html attribute "name" as the attrName argument.
@@ -92,12 +101,12 @@ class Backbone.Formwell
   # Find the html element where to show the error message,
   # or create it in a default position if it doesn't exist (so it's only needed in the markup is it needs to be in a weird place).
   # The error element should be a span.error-message with the same html attribute "data-name" as the attrName argument.
-  formErrorFindOrCreateErrorEl: (attrName, $inputEl) ->
-    $errorEl = @view.$(".error-message[data-name='#{attrName}']")
-    if $errorEl.length is 0 # if there is no error-message element, create one and put next to the input
-      $errorEl = jQuery("<span class='error-message' data-name='#{attrName}'>error</span>")
-      $inputEl.after($errorEl)
-    $errorEl
+  findOrCreateError: (attrName, $input) ->
+    $error = @view.$(".error-message[data-name='#{attrName}']")
+    if $error.length is 0 # if there is no error-message element, create one and put next to the input
+      $error = $("<span class='error-message' data-name='#{attrName}'>error</span>")
+      $input.after($error)
+    $error
 
-  # Find all error elements in the form (created or identified by formErrorFindOrCreateErrorEl)
-  formErrorFindAllErrorsEl: -> @view.$(".error-message[data-name]")
+  # Find all error elements in the form (created or identified by findOrCreateError)
+  findAllErrors: -> @view.$(".error-message[data-name]")
